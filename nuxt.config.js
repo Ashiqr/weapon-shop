@@ -39,8 +39,8 @@ export default {
     '@nuxtjs/pwa'
   ],
 
-  // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {},
+  // Axios module configuration (https://go.nuxtjs.dev/config-axios)
+  axios: {baseURL: 'http://localhost:3000'},
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
@@ -51,5 +51,20 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-  }
+  },
+  serverMiddleware: [
+    { path: '/api/main', handler: '~/api/main.js' },
+  ],
+
+  publicRuntimeConfig: {
+    axios: {
+      browserBaseURL: process.env.BROWSER_BASE_URL
+    }
+  },
+
+  privateRuntimeConfig: {
+    axios: {
+      baseURL: process.env.BASE_URL
+    }
+  },
 }

@@ -53,7 +53,7 @@ export default {
   build: {
   },
   serverMiddleware: [
-    { path: '/api/main', handler: '~/api/main.js' },
+    { path: '/api/package', handler: '~/api/package.js' },
   ],
 
   publicRuntimeConfig: {

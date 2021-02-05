@@ -54,6 +54,7 @@ export default {
   },
   serverMiddleware: [
     { path: '/api/package', handler: '~/api/package.js' },
+    { path: '/api/exchangerate', handler: '~/api/exchangeRate.js' },
   ],
 
   publicRuntimeConfig: {

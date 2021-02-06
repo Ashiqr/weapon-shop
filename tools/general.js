@@ -23,6 +23,14 @@ function ObjectToArray(data, sortOrder){
     return result;
 }
 
+function ObjectArrayToArray(data, sortOrder) {
+    var result = [];
+    for(var i = 0, l = data.length; i < l; i++) {
+        ObjectToArray(data[i], sortOrder).map(value => result.push(value));
+    }
+    return result;
+}
+
 function CleanQuotes(data){
     for(var i = 0, len = data.length; i < len; i++){
         if (typeof(data[i]) === 'string'){
@@ -34,8 +42,8 @@ function CleanQuotes(data){
 
 function ConvertCurrency(fromCurrency, toCurrency, amount, exchangeRates) {
     try {
-        const toBase = amount / exchangeRates.rates[fromCurrency];
-        return (toBase * exchangeRates.rates[toCurrency]).toFixed(2);
+        const toBase = amount / exchangeRates.rates[fromCurrency.toUpper()];
+        return (toBase * exchangeRates.rates[toCurrency.toUpper()]).toFixed(2);
     }
     catch {
         return 0;
@@ -44,5 +52,6 @@ function ConvertCurrency(fromCurrency, toCurrency, amount, exchangeRates) {
 }
 
 exports.ObjectToArray = ObjectToArray;
+exports.ObjectArrayToArray = ObjectArrayToArray;
 exports.CleanQuotes = CleanQuotes;
 exports.ConvertCurrency = ConvertCurrency;

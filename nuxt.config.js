@@ -26,7 +26,7 @@ export default {
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
     // https://go.nuxtjs.dev/eslint
-    '@nuxtjs/eslint-module'
+    // '@nuxtjs/eslint-module'
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -55,6 +55,7 @@ export default {
   serverMiddleware: [
     { path: '/api/package', handler: '~/api/package.js' },
     { path: '/api/exchangerate', handler: '~/api/exchangeRate.js' },
+    { path: '/api/user', handler: '~/api/user.js' },
   ],
 
   publicRuntimeConfig: {

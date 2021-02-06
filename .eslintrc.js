@@ -1,8 +1,8 @@
 module.exports = {
-  root: true,
+  root: false,
   env: {
-    browser: true,
-    node: true
+    browser: false,
+    node: false
   },
   parserOptions: {
     parser: 'babel-eslint'
@@ -14,5 +14,5 @@ module.exports = {
   plugins: [
   ],
   // add your custom rules here
-  rules: {}
+  rules: {'semi': 0, 'object-shorthand': 0, 'brace-style': 0}
 }

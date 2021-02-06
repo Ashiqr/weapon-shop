@@ -1,13 +1,19 @@
 const bodyParser = require('body-parser');
 const app = require('express')();
 const external = require('../external/package');
-const database = require('../database/database');
+const database = require('../database/package');
 
 app.use(bodyParser.json());
 
 app.post('/', (req, res) => {
-    database.InsertPackage(req.body).then((result) => {
-       res.json({'Id': result});
+    database.InsertPackage(req.body).then((id) => {
+      external.getProducts().then(allProducts => {
+        let data = req.body;
+        data.Id = id;
+        database.LinkPackageProducts(data, allProducts).then((result) => {
+          res.json({'Id': id});
+        })
+      })
     })
     .catch((err) => {
       res.json({'Error': err});
@@ -15,8 +21,12 @@ app.post('/', (req, res) => {
 });
 
 app.patch('/', (req, res) => {
-    database.UpdatePackage(req.body).then((result) => {
-       res.json({'Id': result});
+    database.UpdatePackage(req.body).then((id) => {
+      external.getProducts().then(allProducts => {
+        database.LinkPackageProducts(req.body, allProducts).then((result) => {
+          res.json({'Id': result});
+        })
+      })
     })
     .catch((err) => {
       res.json({'Error': err});
@@ -30,6 +40,18 @@ app.get('/', (req, res) => {
     .catch((err) => {
       res.json({'Error': err});
     });
+});
+
+app.get('/full', (req, res) => {
+  database.FetchPackage(req.query.id).then((result) => {
+    database.FetchPackageProducts(result.id).then((products) => {
+      result.Products = products;
+      res.json(result);
+    })
+  })
+  .catch((err) => {
+    res.json({'Error': err});
+  });
 });
 
 app.get('/allproducts', (req, res) => {

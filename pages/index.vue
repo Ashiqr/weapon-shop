@@ -5,30 +5,55 @@
       <h1 class="title">
         weapon-shop
       </h1>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--green"
-        >
-          Documentation
-        </a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--grey"
-        >
-          GitHub
-        </a>
-      </div>
+       <div>
+        <b-form @submit="onSubmit">
+          <b-form-group id="input-1" label="Username:" label-for="input-1">
+            <b-form-input id="input-1" v-model="form.Username" placeholder="Enter Username" required />
+          </b-form-group>
+          <b-button type="submit" variant="primary">Submit</b-button>
+           <NuxtLink to="/package" class="button--green">New Package</NuxtLink>
+        </b-form>
+        </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {}
+export default {
+  data () {
+    return {
+      form: {
+        Username: '',
+        Currency: 'USD'
+      }
+    }
+  },
+  created: function () {
+    this.storage();
+  },
+  methods: {
+    storage(){
+       if (process.browser && localStorage.getItem('userId')) {
+        document.location = '/package';
+      }
+    },
+    onSubmit (event) {
+      event.preventDefault();
+      const data = {
+        Username: this.form.Username,
+        Currency: this.form.Currency
+      };
+      this.$axios.$post('/api/user', data)
+        .then((response) => {
+          if (response.Id) {
+            localStorage.setItem('userId', response.Id);
+            document.location = '/package';
+          }
+        })
+        .catch((error) => { console.log(error) });
+    }
+  }
+}
 </script>
 
 <style>

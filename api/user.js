@@ -13,6 +13,15 @@ app.post('/', (req, res) => {
     });
 });
 
+app.delete('/', (req, res) => {
+  database.DeleteUser(req.body).then((result) => {
+     res.end();
+  })
+  .catch((err) => {
+    res.json({'Error': err});
+  });
+});
+
 app.get('/', (req, res) => {
     database.FetchPackage(req.query.id).then((result) => {
       res.json(result);

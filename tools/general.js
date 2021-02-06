@@ -41,6 +41,7 @@ function CleanQuotes(data){
 }
 
 function ConvertCurrency(fromCurrency, toCurrency, amount, exchangeRates) {
+    exchangeRates.rates[exchangeRates.base] = 1;
     try {
         const toBase = amount / exchangeRates.rates[fromCurrency.toUpper()];
         return (toBase * exchangeRates.rates[toCurrency.toUpper()]).toFixed(2);

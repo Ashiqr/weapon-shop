@@ -2,6 +2,7 @@ const bodyParser = require('body-parser');
 const app = require('express')();
 const external = require('../external/package');
 const database = require('../database/package');
+const packageTools = require('../tools/package');
 
 app.use(bodyParser.json());
 
@@ -61,6 +62,16 @@ app.get('/allproducts', (req, res) => {
     .catch(err => {
         res.status(500).json({'Error': err});
     });
+});
+
+
+app.get('/search', (req, res) => {
+  database.SearchPackage(req.query.Name).then(result => {
+      res.json(packageTools.GroupPackages(result, 3));
+  })
+  .catch(err => {
+      res.status(500).json({'Error': err});
+  });
 });
 
 module.exports = app;

@@ -17,4 +17,17 @@ function InsertUser(data) {
     });
 }
 
+function DeleteUser(data) {
+  return new Promise ((resolve, reject) => {
+    var params = generalTools.CleanQuotes(generalTools.ObjectToArray(data, ['Username']));
+    db.run('Delete from users where Username = ?', params, function(err) {
+        if (err) {
+          reject(err.message);
+        }
+        resolve('ok');
+    });
+  });
+}
+
 exports.InsertUser = InsertUser;
+exports.DeleteUser = DeleteUser;

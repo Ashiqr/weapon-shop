@@ -67,22 +67,20 @@ function LinkPackageProducts(data, allProducts) {
         const sqlInsert = `Insert Into package_products (PackageId, ProductId, Price, Quantity)
                 VALUES ${placeholders} `;
         db.run(sqlInsert, params, function(err) {
-                  if (err){
-                    reject(err.message);
-                  }
-                  resolve(data.Id);
-                });
+          if (err){
+            reject(err.message);
+          }
+          resolve(data.Id);
+        });
     });
   });
 }
 
-function SearchPackage(tags, includeAll) {
+function SearchPackage(Name) {
   return new Promise ((resolve, reject) => {
-    if (tags) {
+    if (Name) {
       try {
-        tags = tags.split(',');
-        var search = generalTools.MakeSearchTags(tags.length, includeAll ? 'AND' : 'OR');
-        db.all('Select * from package where ' + search, tags, function(err, rows) {
+        db.all('Select * from package where Name LIKE \'%\'|| ? || \'%\'', [Name], function(err, rows) {
             if (err) {
               reject(err.message);
             }
@@ -94,7 +92,12 @@ function SearchPackage(tags, includeAll) {
       }
     }
     else{
-      reject('No search Data');
+      db.all('Select * from package', function(err, rows) {
+        if (err) {
+          reject(err.message);
+        }
+        resolve(rows);
+    });
     }
   });
 }

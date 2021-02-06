@@ -10,8 +10,12 @@
           <b-form-group id="input-1" label="Username:" label-for="input-1">
             <b-form-input id="input-1" v-model="form.Username" placeholder="Enter Username" required />
           </b-form-group>
-          <b-button type="submit" variant="primary">Submit</b-button>
-           <NuxtLink to="/package" class="button--green">New Package</NuxtLink>
+          <b-form-group id="input-group-2" label="Currency:" label-for="input-2">
+            <b-form-select id="input-2" v-model="form.Currency" :options="Currencies" 
+            required  />
+          </b-form-group>
+          <b-button type="submit" variant="primary">Login</b-button>
+           <!-- <NuxtLink to="/package" class="button--green">New Package</NuxtLink> -->
         </b-form>
         </div>
     </div>
@@ -25,7 +29,11 @@ export default {
       form: {
         Username: '',
         Currency: 'USD'
-      }
+      },
+      Currencies: [
+        'AUD','BGN','BRL','CAD','CHF','CNY','CZK','DKK','EUR','GBP','HKD',
+        'HRK','HUF','IDR','ILS','INR','ISK','JPY','KRW','MYR','MXN','NOK',
+        'NZD','PHP','PLN','RON','RUB','SEK','SGD','THB','TRY','USD','ZAR',]
     }
   },
   created: function () {
@@ -34,7 +42,7 @@ export default {
   methods: {
     storage(){
        if (process.browser && localStorage.getItem('userId')) {
-        document.location = '/package';
+        document.location = '/front';
       }
     },
     onSubmit (event) {
@@ -47,7 +55,8 @@ export default {
         .then((response) => {
           if (response.Id) {
             localStorage.setItem('userId', response.Id);
-            document.location = '/package';
+            localStorage.setItem('currency', this.form.Currency);
+            document.location = '/front';
           }
         })
         .catch((error) => { console.log(error) });

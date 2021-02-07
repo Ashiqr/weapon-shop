@@ -1,5 +1,7 @@
 <template>
   <div>
+    <Header />
+    <h3>Package Edit</h3>
     <b-form @submit="onSubmit" @reset="onReset">
         <b-form-group id="input-group-2" label="Name:" label-for="input-2">
             <b-form-input id="input-2" v-model="form.Name" placeholder="Enter Name"  required />
@@ -16,7 +18,7 @@
         </b-form-group>
 
         <b-form-group id="input-group-6" label="Price:">
-            <span>{{totalPrice}}</span>
+            <span>{{totalPriceDisplay}}</span>
         </b-form-group>
 
       <b-button type="submit" variant="primary">Submit</b-button>
@@ -38,7 +40,8 @@ export default {
         Id: null
       },
       products: [],
-      totalPrice: 0
+      totalPrice: 0,
+      totalPriceDisplay: ''
     };
   },
   created: function () {
@@ -51,6 +54,9 @@ export default {
             sum += this.products.find(p => p.value === selectedProduct).price;
         });
         this.totalPrice = sum;
+        ConvertPrice(this.totalPrice).then(result => {
+          this.totalPriceDisplay = `${result} ${localStorage.getItem('currency')}`;
+        });
     },
     onSubmit (event) {
       event.preventDefault();

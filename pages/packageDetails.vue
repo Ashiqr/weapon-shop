@@ -18,7 +18,7 @@
         </b-form-group>
 
         <b-form-group id="input-group-6" label="Price:">
-            <span>{{totalPrice}}</span>
+            <span>{{totalPriceDisplay}}</span>
         </b-form-group>
 
       <b-button type="button" variant="primary" v-on:click="back()">Back</b-button>
@@ -38,7 +38,8 @@ export default {
         Id: null
       },
       products: [],
-      totalPrice: 0
+      totalPrice: 0,
+      totalPriceDisplay: ''
     };
   },
   created: function () {
@@ -54,6 +55,9 @@ export default {
             sum += this.products.find(p => p.value === selectedProduct).price;
         });
         this.totalPrice = sum;
+        ConvertPrice(this.totalPrice).then(result => {
+          this.totalPriceDisplay = `${result} ${localStorage.getItem('currency')}`;
+        });
     },
     fetchPackage (id) {
       this.$axios.$get('/api/package/full?id=' + id)

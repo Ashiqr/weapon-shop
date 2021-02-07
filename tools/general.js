@@ -49,6 +49,16 @@ function ConvertCurrency(fromCurrency, toCurrency, amount, exchangeRates) {
     catch {
         return 0;
     }
+}
+
+function CurrencyRate(fromCurrency, toCurrency, exchangeRates) {
+    exchangeRates.rates[exchangeRates.base] = 1;
+    try {
+        return (exchangeRates.rates[toCurrency.toUpperCase()] / exchangeRates.rates[fromCurrency.toUpperCase()]).toFixed(2);
+    }
+    catch {
+        return 0;
+    }
     
 }
 
@@ -56,3 +66,4 @@ exports.ObjectToArray = ObjectToArray;
 exports.ObjectArrayToArray = ObjectArrayToArray;
 exports.CleanQuotes = CleanQuotes;
 exports.ConvertCurrency = ConvertCurrency;
+exports.CurrencyRate = CurrencyRate;

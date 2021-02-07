@@ -17,4 +17,16 @@ app.get('/', (req, res) => {
     });
 });
 
+app.get('/rate', (req, res) => {
+  if (!req.query.from || !req.query.to) {
+      return res.json({'Error': 'Invalid parameters'});
+  }
+  external.getExchangeRates().then((result) => {
+    res.json( {rate :  generalTools.CurrencyRate(req.query.from, req.query.to, result)});
+  })
+  .catch((err) => {
+    res.json({'Error': err});
+  });
+});
+
 module.exports = app;

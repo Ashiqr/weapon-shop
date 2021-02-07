@@ -12,6 +12,9 @@
             <template #cell(id)="data">
                 <NuxtLink :to="'/package?id=' + data.value" >{{ data.value }}</NuxtLink>
             </template>
+            <template #cell(price)="data">
+               {{ convertPrice(data.value)}}
+            </template>
         </b-table>
     </div>
   </b-container>
@@ -33,7 +36,10 @@ export default {
           }
         })
         .catch((error) => { console.log(error) });
-    }
+    },
+    convertPrice(price) {
+      return `${CalculatePrice(price, sessionStorage.getItem('rate'))} ${localStorage.getItem('currency')}`;
+    },
   }
 }
 </script>

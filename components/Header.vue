@@ -5,7 +5,7 @@
         <div class="cart">
             <b-button href='/cart' variant="info">Cart</b-button>
             <span>{{count}} {{ count === 1 ?  'Item in Cart.' : 'Items in Cart.'}}</span>
-            <span>Total: {{totalPrice}}</span>
+            <span class="price">Total: {{totalPriceDisplay}}</span>
         </div>
     </div>
 </template>
@@ -14,13 +14,24 @@ export default {
 data () {
     return {
       count: 0,
-      totalPrice: 0
+      totalPrice: 0,
+      totalPriceDisplay: ''
     };
   },
+  head: {
+    script: [
+      {
+        type: "text/javascript",
+        src: '/exchangeRate.js'
+      }
+    ]
+  },
+
   created: function () {
       if (process.browser) {
           this.getCount();
           this.getCartInformation();
+          
       }
   },
   methods: {
@@ -40,6 +51,9 @@ data () {
         .then((response) => {
           if (response) {
             this.totalPrice = response[0].TotalPrice;
+            ConvertPrice(this.totalPrice).then(result => {
+              this.totalPriceDisplay = `${result} ${localStorage.getItem('currency')}`;
+            });
           }
         })
         .catch((error) => { console.log(error) });

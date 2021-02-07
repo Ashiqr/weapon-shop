@@ -5,7 +5,7 @@
     <b-card-group deck v-for="group in packages" :key="group.group">
         <b-card v-for="pack in group.items" :key="pack.Name" 
         bg-variant="light" :header=pack.Name class="text-center" border-variant="primary"
-        :footer=pack.Price.toString()
+        :footer=convertPrice(pack.Price)
         footer-tag="footer"
         footer-border-variant="dark">
         <b-card-text>{{pack.Description}}</b-card-text>
@@ -32,12 +32,16 @@ data () {
         .then((response) => {
           if (response) {
             this.packages = response;
+            
           }
         })
         .catch((error) => { console.log(error) });
     },
     makeUrl (id) {
         return `/packageDetails?id=${id}`;
+    },
+    convertPrice(price) {
+      return `${CalculatePrice(price, sessionStorage.getItem('rate'))} ${localStorage.getItem('currency')}`;
     },
     addCart(packageId) {
       const data = {

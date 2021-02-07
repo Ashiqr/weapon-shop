@@ -15,7 +15,6 @@
             required  />
           </b-form-group>
           <b-button type="submit" variant="primary">Login</b-button>
-           <!-- <NuxtLink to="/package" class="button--green">New Package</NuxtLink> -->
         </b-form>
         </div>
     </div>

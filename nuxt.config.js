@@ -56,6 +56,7 @@ export default {
     { path: '/api/package', handler: '~/api/package.js' },
     { path: '/api/exchangerate', handler: '~/api/exchangeRate.js' },
     { path: '/api/user', handler: '~/api/user.js' },
+    { path: '/api/cart', handler: '~/api/cart.js' }
   ],
 
   publicRuntimeConfig: {

@@ -1,6 +1,8 @@
 <template>
   <div>
+    <Header />
     <b-form>
+      <h3>Package Details</h3>
         <b-form-group id="input-group-2" label="Name:" label-for="input-2">
             <b-form-input id="input-2" v-model="form.Name" placeholder="Enter Name"  disabled />
         </b-form-group>
@@ -20,6 +22,7 @@
         </b-form-group>
 
       <b-button type="button" variant="primary" v-on:click="back()">Back</b-button>
+      <b-button href="#" variant="success">Add to cart</b-button>
     </b-form>
   </div>
 </template>

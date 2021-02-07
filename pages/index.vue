@@ -56,6 +56,7 @@ export default {
           if (response.Id) {
             localStorage.setItem('userId', response.Id);
             localStorage.setItem('currency', this.form.Currency);
+            localStorage.setItem('cartId', 0);
             document.location = '/front';
           }
         })

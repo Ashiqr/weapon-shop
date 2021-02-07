@@ -1,8 +1,8 @@
 <template>
 <div>
     <Header />
-    <h3>Packages for Sale</h3>
-    <b-card-group deck v-for="group in packages" :key="group.group">
+    <h3>Cart Items</h3>
+    <b-card-group deck v-for="group in items" :key="group.group">
         <b-card v-for="pack in group.items" :key="pack.Name" 
         bg-variant="light" :header=pack.Name class="text-center" border-variant="primary"
         :footer=pack.Price.toString()
@@ -10,7 +10,7 @@
         footer-border-variant="dark">
         <b-card-text>{{pack.Description}}</b-card-text>
         <b-button :href=makeUrl(pack.id) variant="info">Details</b-button>
-        <b-button v-on:click="addCart(pack.id)" variant="success">Add to cart</b-button>
+        <b-button v-on:click="removeCart(pack.id)" variant="success">Remove from cart</b-button>
         </b-card>
     </b-card-group>
 </div>
@@ -20,18 +20,21 @@
 export default {
 data () {
     return {
-      packages: []
+      items: []
     };
   },
   created: function () {
-    this.search();
+      if (process.browser) {
+          this.cartItems();
+      }
   },
   methods: {
-    search () {
-      this.$axios.$get('/api/package/search')
+    cartItems () {
+      const cartId = localStorage.getItem('cartId');
+      this.$axios.$get(`/api/cart?id=${cartId}`)
         .then((response) => {
           if (response) {
-            this.packages = response;
+            this.items = response;
           }
         })
         .catch((error) => { console.log(error) });
@@ -39,20 +42,16 @@ data () {
     makeUrl (id) {
         return `/packageDetails?id=${id}`;
     },
-    addCart(packageId) {
+    removeCart(packageId) {
       const data = {
         CartId: localStorage.getItem('cartId'),
         PackageId: packageId,
-        UserId: localStorage.getItem('userId'),
-        TotalPrice: 0,
-        Discount: 0
       };
-      this.$axios.$post('/api/cart', data)
+      this.$axios.$delete('/api/cart',  { 'data': data })
           .then((response) => {
             if (response.Id) {
                localStorage.setItem('cartId', response.Id);
-               document.location = '/front';
-               
+               this.cartItems();              
             }
           })
           .catch((error) => { console.log(error) });

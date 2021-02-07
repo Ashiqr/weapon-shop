@@ -66,8 +66,17 @@ app.get('/allproducts', (req, res) => {
 
 
 app.get('/search', (req, res) => {
-  database.SearchPackage(req.query.Name).then(result => {
+  database.SearchPackage(req.query.name).then(result => {
       res.json(packageTools.GroupPackages(result, 3));
+  })
+  .catch(err => {
+      res.status(500).json({'Error': err});
+  });
+});
+
+app.get('/searchadmin', (req, res) => {
+  database.SearchPackage(req.query.name).then(result => {
+      res.json(result);
   })
   .catch(err => {
       res.status(500).json({'Error': err});

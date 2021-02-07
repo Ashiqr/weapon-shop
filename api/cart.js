@@ -41,4 +41,13 @@ app.get('/count', (req, res) => {
     });
 });
 
+app.get('/information', (req, res) => {
+    database.FetchCartInformation(req.query.id).then((result) => {
+      res.json(result);
+    })
+    .catch((err) => {
+      res.json({'Error': err});
+    });
+});
+
 module.exports = app;

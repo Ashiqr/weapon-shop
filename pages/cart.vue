@@ -10,7 +10,7 @@
         footer-border-variant="dark">
         <b-card-text>{{pack.Description}}</b-card-text>
         <b-button :href=makeUrl(pack.id) variant="info">Details</b-button>
-        <b-button v-on:click="removeCart(pack.id)" variant="success">Remove from cart</b-button>
+        <b-button v-on:click="removeCart(pack.id)" variant="danger">Remove from cart</b-button>
         </b-card>
     </b-card-group>
 </div>
@@ -51,7 +51,7 @@ data () {
           .then((response) => {
             if (response.Id) {
                localStorage.setItem('cartId', response.Id);
-               this.cartItems();              
+               document.location = '/cart';
             }
           })
           .catch((error) => { console.log(error) });

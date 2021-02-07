@@ -21,6 +21,7 @@
 
       <b-button type="submit" variant="primary">Submit</b-button>
       <b-button type="reset" variant="danger">Reset</b-button>
+      <b-button type="button" variant="primary" v-on:click="back()">Back</b-button>
     </b-form>
   </div>
 </template>
@@ -78,6 +79,9 @@ export default {
           })
           .catch((error) => { console.log(error) });
       }
+    },
+    back () {
+        this.$router.go(-1);
     },
     onReset (event) {
       event.preventDefault();

@@ -66,6 +66,7 @@ function RemoveCart(data){
             if (err) {
               reject(err.message);
             }
+            UpdatePrice(data.CartId);
             resolve(data.CartId);
         });
       });
@@ -100,7 +101,21 @@ function FetchCartCount(id){
     });
 }
 
+function FetchCartInformation(id){
+    return new Promise ((resolve, reject) => {
+        db.all(`SELECT *
+                from cart c
+                WHERE c.id = ?`, [id], function(err, rows) {
+            if (err) {
+                reject(err.message);
+            }
+            resolve(rows);
+        });
+    });
+}
+
 exports.InsertCart = InsertCart;
 exports.RemoveCart = RemoveCart;
 exports.FetchCart = FetchCart;
 exports.FetchCartCount = FetchCartCount;
+exports.FetchCartInformation = FetchCartInformation;

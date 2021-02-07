@@ -1,10 +1,11 @@
 <template>
     <div class="header">
-        <b-button href='#' variant="primary">Admin</b-button>
+        <b-button href='/packageAdmin' variant="info">Admin</b-button>
         <a href="/front" class="title">Weapon Store</a>
         <div class="cart">
-            <b-button href='/cart' variant="primary">Cart</b-button>
-            <span>{{count}} {{ count === 1 ?  'Item in Cart' : 'Items in Cart'}}</span>
+            <b-button href='/cart' variant="info">Cart</b-button>
+            <span>{{count}} {{ count === 1 ?  'Item in Cart.' : 'Items in Cart.'}}</span>
+            <span>Total: {{totalPrice}}</span>
         </div>
     </div>
 </template>
@@ -12,12 +13,14 @@
 export default {
 data () {
     return {
-      count: 0
+      count: 0,
+      totalPrice: 0
     };
   },
   created: function () {
       if (process.browser) {
           this.getCount();
+          this.getCartInformation();
       }
   },
   methods: {
@@ -27,6 +30,16 @@ data () {
         .then((response) => {
           if (response) {
             this.count = response[0].count;
+          }
+        })
+        .catch((error) => { console.log(error) });
+    },
+    getCartInformation () {
+      const cartId = localStorage.getItem('cartId');
+      this.$axios.$get(`/api/cart/Information?id=${cartId}`)
+        .then((response) => {
+          if (response) {
+            this.totalPrice = response[0].TotalPrice;
           }
         })
         .catch((error) => { console.log(error) });

@@ -22,14 +22,4 @@ app.delete('/', (req, res) => {
   });
 });
 
-app.get('/', (req, res) => {
-    database.FetchPackage(req.query.id).then((result) => {
-      res.json(result);
-    })
-    .catch((err) => {
-      res.json({'Error': err});
-    });
-});
-
-
 module.exports = app;

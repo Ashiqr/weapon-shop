@@ -1,5 +1,5 @@
 function MakePackageProductLink(data, allProducts) {
-    var products = [];
+    let products = [];
     data.Products.map(productId => {
         allProducts.find(ap => ap.id === productId).Price;
         products.push({PackageId: data.Id, 
@@ -11,13 +11,12 @@ function MakePackageProductLink(data, allProducts) {
     return data;
 }
 
-
 function GroupPackages(packages, groupByCount){
     let result = [];
     let count = 0;
     let groupCount = 1;
     let len = packages.length;
-    while (count < len){
+    while (count < len) {
         let group = {groupId : groupCount++, items: []};
         for(let i = 0; i < groupByCount; i++) {
             if (count >= len){

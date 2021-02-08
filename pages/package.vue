@@ -1,25 +1,24 @@
 <template>
   <div>
     <Header />
-    <h3>Package Edit</h3>
+    <h3>Package Entry</h3>
     <b-form @submit="onSubmit" @reset="onReset">
-        <b-form-group id="input-group-2" label="Name:" label-for="input-2">
-            <b-form-input id="input-2" v-model="form.Name" placeholder="Enter Name"  required />
-        </b-form-group>
+      <b-form-group id="input-group-2" label="Name:" label-for="input-2">
+          <b-form-input id="input-2" v-model="form.Name" placeholder="Enter Name" required />
+      </b-form-group>
 
-        <b-form-group id="input-group-3" label="Description:" label-for="input-3">
-            <b-form-input id="input-3" v-model="form.Description" placeholder="Enter Description" 
-            required />
-        </b-form-group>
+      <b-form-group id="input-group-3" label="Description:" label-for="input-3">
+          <b-form-input id="input-3" v-model="form.Description" placeholder="Enter Description" required />
+      </b-form-group>
 
-        <b-form-group id="input-group-1" label="Products:" label-for="input-1">
-            <b-form-select id="input-1" v-model="form.Products" :options="products" multiple :select-size="5" 
-            required @change="onProductChange($event)" />
-        </b-form-group>
+      <b-form-group id="input-group-1" label="Products:" label-for="input-1">
+          <b-form-select id="input-1" v-model="form.Products" :options="products" multiple :select-size="5" 
+          required @change="onProductChange($event)" />
+      </b-form-group>
 
-        <b-form-group id="input-group-6" label="Price:">
-            <span>{{totalPriceDisplay}}</span>
-        </b-form-group>
+      <b-form-group id="input-group-6" label="Price:">
+          <span>{{totalPriceDisplay}}</span>
+      </b-form-group>
 
       <b-button type="submit" variant="primary">Submit</b-button>
       <b-button type="reset" variant="danger">Reset</b-button>
@@ -70,7 +69,12 @@ export default {
         this.$axios.$post('/api/package', data)
           .then((response) => {
             if (response.Id) {
-               document.location = '/package?id=' + response.Id;
+              this.$bvToast.toast('Record Saved', {
+                title: 'Success',
+                variant: 'success',
+                solid: true
+              })
+              document.location = '/package?id=' + response.Id;
             }
           })
           .catch((error) => { console.log(error) });
@@ -81,13 +85,18 @@ export default {
           .then((response) => {
             if (response.Id) {
               this.form.Id = response.Id;
+              this.$bvToast.toast('Record Saved', {
+                title: 'Success',
+                variant: 'success',
+                solid: true
+              })
             }
           })
           .catch((error) => { console.log(error) });
       }
     },
     back () {
-        this.$router.go(-1);
+      this.$router.go(-1);
     },
     onReset (event) {
       event.preventDefault();
@@ -105,7 +114,7 @@ export default {
             this.form.Price = response.Price;
             this.form.Id = response.id;
             response.Products.map(p => {
-                this.form.Products.push(p.ProductId);
+              this.form.Products.push(p.ProductId);
             });
             this.onProductChange(null);
           }
@@ -116,7 +125,7 @@ export default {
         this.$axios.$get('/api/package/allproducts')
         .then((response) => {
             response.map(p => {
-                this.products.push({ value: p.id, text: p.name, price: p.usdPrice })
+              this.products.push({ value: p.id, text: p.name, price: p.usdPrice })
             });
             if (this.$route.query.id) {
               this.fetchPackage(this.$route.query.id);
@@ -128,7 +137,7 @@ export default {
 };
 </script>
 <style>
-    div {
-        margin: 5px;
-    }
+  div {
+    margin: 5px;
+  }
 </style>

@@ -2,12 +2,12 @@ const sqlite3 = require('sqlite3');
 const path = require('path');
 const generalTools = require('../tools/general');
 
-var db = new sqlite3.Database(path.resolve(__dirname, './weapon_shop.sqlite3'));
+let db = new sqlite3.Database(path.resolve(__dirname, './weapon_shop.sqlite3'));
 
 function InsertCart(data) {
     return new Promise ((resolve, reject) => {
         if (!data.CartId){
-            var params = generalTools.CleanQuotes(generalTools.ObjectToArray(data, ['UserId', 'TotalPrice', 'Discount']));
+            let params = generalTools.CleanQuotes(generalTools.ObjectToArray(data, ['UserId', 'TotalPrice', 'Discount']));
             db.run('Insert Into cart (UserId, TotalPrice, Discount) VALUES(?,?,?)', params, function(err) {
                 if (err) {
                     reject(err.message);
@@ -30,7 +30,7 @@ function InsertCart(data) {
 
 function LinkCartPackages(data){
     return new Promise ((resolve, reject) => {
-        var params = generalTools.CleanQuotes(generalTools.ObjectToArray(data, ['CartId', 'PackageId']));
+        let params = generalTools.CleanQuotes(generalTools.ObjectToArray(data, ['CartId', 'PackageId']));
         db.run('Insert Into cart_packages (CartId, PackageId) VALUES(?,?)', params, function(err) {
             if (err) {
                 reject(err.message);
@@ -60,7 +60,7 @@ function UpdatePrice(cartId){
 
 function RemoveCart(data){
     return new Promise ((resolve, reject) => {
-        var params = generalTools.CleanQuotes(generalTools.ObjectToArray(data, ['CartId', 'PackageId']));
+        let params = generalTools.CleanQuotes(generalTools.ObjectToArray(data, ['CartId', 'PackageId']));
         db.run(`Delete from cart_packages 
                 Where CartId = ? and PackageId = ?`, params, function(err) {
             if (err) {

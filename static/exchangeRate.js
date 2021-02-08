@@ -1,6 +1,6 @@
 function ConvertPrice(price) {
     return new Promise((resolve) => {
-        var rate = sessionStorage.getItem('rate');
+        let rate = sessionStorage.getItem('rate');
         if (rate) {
             resolve(CalculatePrice(price, rate));
         }

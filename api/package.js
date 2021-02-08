@@ -3,12 +3,18 @@ const app = require('express')();
 const external = require('../external/package');
 const database = require('../database/package');
 const packageTools = require('../tools/package');
+const generalTools = require('../tools/general');
+
 
 app.use(bodyParser.json());
 
 app.post('/', (req, res) => {
+    let validation = generalTools.ValidateRequiredFields(req.body, ['Name', 'Description', 'Products']);
+    if (validation.length > 0){
+      return res.status(400).json({'Required_fields': validation});
+    }
     database.InsertPackage(req.body).then((id) => {
-      external.getProducts().then(allProducts => {
+      external.GetProducts().then(allProducts => {
         let data = req.body;
         data.Id = id;
         database.LinkPackageProducts(data, allProducts).then((result) => {
@@ -22,16 +28,20 @@ app.post('/', (req, res) => {
 });
 
 app.patch('/', (req, res) => {
-    database.UpdatePackage(req.body).then((id) => {
-      external.getProducts().then(allProducts => {
-        database.LinkPackageProducts(req.body, allProducts).then((result) => {
-          res.json({'Id': result});
-        })
+  let validation = generalTools.ValidateRequiredFields(req.body, ['Name', 'Description', 'Products']);
+  if (validation.length > 0){
+    return res.status(400).json({'Required_fields': validation});
+  }
+  database.UpdatePackage(req.body).then((id) => {
+    external.GetProducts().then(allProducts => {
+      database.LinkPackageProducts(req.body, allProducts).then((result) => {
+        res.json({'Id': result});
       })
     })
-    .catch((err) => {
-      res.json({'Error': err});
-    });
+  })
+  .catch((err) => {
+    res.json({'Error': err});
+  });
 });
   
 app.get('/', (req, res) => {
@@ -44,6 +54,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/full', (req, res) => {
+  // Two calls are made to avoid redundant data
   database.FetchPackage(req.query.id).then((result) => {
     database.FetchPackageProducts(result.id).then((products) => {
       result.Products = products;
@@ -56,7 +67,7 @@ app.get('/full', (req, res) => {
 });
 
 app.get('/allproducts', (req, res) => {
-    external.getProducts().then(result => {
+    external.GetProducts().then(result => {
         res.json(result);
     })
     .catch(err => {

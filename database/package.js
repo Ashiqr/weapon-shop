@@ -3,11 +3,11 @@ const path = require('path');
 const generalTools = require('../tools/general');  
 const packageTools = require('../tools/package');
 
-var db = new sqlite3.Database(path.resolve(__dirname, './weapon_shop.sqlite3'));
+let db = new sqlite3.Database(path.resolve(__dirname, './weapon_shop.sqlite3'));
 
 function InsertPackage(data) {
   return new Promise ((resolve, reject) => {
-    var params = generalTools.CleanQuotes(generalTools.ObjectToArray(data, ['Name', 'Description', 'Price']));
+    let params = generalTools.CleanQuotes(generalTools.ObjectToArray(data, ['Name', 'Description', 'Price']));
     db.run('Insert Into package (Name, Description, Price) VALUES(?,?,?)', params, function(err) {
         if (err) {
           reject(err.message);
@@ -41,7 +41,7 @@ function FetchPackageProducts(Id) {
 
 function UpdatePackage(data) {
   return new Promise ((resolve, reject) => {
-    var params = generalTools.CleanQuotes(generalTools.ObjectToArray(data, ['Name', 'Description', 'Price', 'Id']));
+    let params = generalTools.CleanQuotes(generalTools.ObjectToArray(data, ['Name', 'Description', 'Price', 'Id']));
     db.run(`Update package 
             Set Name = ?,  Description = ?, Price = ?
             Where id = ?`, params, function(err) {
@@ -55,7 +55,7 @@ function UpdatePackage(data) {
 
 function LinkPackageProducts(data, allProducts) {
   return new Promise ((resolve, reject) => {
-    var params = generalTools.CleanQuotes(generalTools.ObjectToArray(data, ['Id']));
+    let params = generalTools.CleanQuotes(generalTools.ObjectToArray(data, ['Id']));
     db.run(`Delete from package_products
             Where PackageId = ?`, params, function(err) {
         if (err) {
@@ -63,7 +63,7 @@ function LinkPackageProducts(data, allProducts) {
         }
         data = packageTools.MakePackageProductLink(data, allProducts);
         params = generalTools.CleanQuotes(generalTools.ObjectArrayToArray(data.Products, ['PackageId', 'ProductId', 'Price', 'Quantity']));
-        var placeholders = data.Products.map((p) => '(?,?,?,?)').join(',');
+        let placeholders = data.Products.map((p) => '(?,?,?,?)').join(',');
         const sqlInsert = `Insert Into package_products (PackageId, ProductId, Price, Quantity)
                 VALUES ${placeholders} `;
         db.run(sqlInsert, params, function(err) {

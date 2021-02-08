@@ -1,7 +1,6 @@
 function MakePackageProductLink(data, allProducts) {
     let products = [];
     data.Products.map(productId => {
-        allProducts.find(ap => ap.id === productId).Price;
         products.push({PackageId: data.Id, 
             ProductId: productId, 
             Price: allProducts.find(ap => ap.id === productId).usdPrice, 

@@ -11,12 +11,13 @@ function ObjectToArray(data, sortOrder){
         }
     }
     else{
-        for(let key in Object.keys(data)){
-            if (typeof(data[key]) === Array){
-                result.push(JSON.stringify(data[key]));
+        let keys = Object.keys(data);
+        for(let k = 0, len = keys.length; k < len; k++){
+            if (typeof(data[keys[k]]) === Array){
+                result.push(JSON.stringify(data[keys[k]]));
             }
             else{
-                result.push(data[key]);
+                result.push(data[keys[k]]);
             }
         }
     }
@@ -25,7 +26,7 @@ function ObjectToArray(data, sortOrder){
 
 function ObjectArrayToArray(data, sortOrder) {
     let result = [];
-    for(let i = 0, l = data.length; i < l; i++) {
+    for(let i = 0, len = data.length; i < len; i++) {
         ObjectToArray(data[i], sortOrder).map(value => result.push(value));
     }
     return result;
@@ -43,8 +44,8 @@ function CleanQuotes(data){
 function ConvertCurrency(fromCurrency, toCurrency, amount, exchangeRates) {
     exchangeRates.rates[exchangeRates.base] = 1;
     try {
-        const toBase = amount / exchangeRates.rates[fromCurrency.toUpper()];
-        return (toBase * exchangeRates.rates[toCurrency.toUpper()]).toFixed(2);
+        const toBase = amount / exchangeRates.rates[fromCurrency.toUpperCase()];
+        return (toBase * exchangeRates.rates[toCurrency.toUpperCase()]).toFixed(2);
     }
     catch {
         return 0;
@@ -53,6 +54,10 @@ function ConvertCurrency(fromCurrency, toCurrency, amount, exchangeRates) {
 
 function CurrencyRate(fromCurrency, toCurrency, exchangeRates) {
     exchangeRates.rates[exchangeRates.base] = 1;
+    //Avoid division by NaN or with NaN
+    if (!exchangeRates.rates[fromCurrency.toUpperCase()] || !exchangeRates.rates[toCurrency.toUpperCase()]) {
+        return 0;
+    }
     try {
         return (exchangeRates.rates[toCurrency.toUpperCase()] / exchangeRates.rates[fromCurrency.toUpperCase()]).toFixed(2);
     }

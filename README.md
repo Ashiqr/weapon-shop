@@ -58,3 +58,6 @@ To meet the time restriction I avoided the following features
 8. Better error handling
 9. Clean code
 10. Hide the credentials for external product API
+
+## Other Technologies
+I could also used C# and MVC Razor or NodeJs and React
